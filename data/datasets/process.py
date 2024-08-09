@@ -15,24 +15,35 @@
 
 # print("Deletion process completed.")
 
-import csv
 import os
+import chardet
 
-# Define the input file path
-input_file = 'downloads/positive_employers_en.csv'
-temp_file = 'downloads/temp_positive_employers_en.csv'
+def detect_file_encoding(file_path):
+    with open(file_path, 'rb') as file:
+        raw_data = file.read()
+    result = chardet.detect(raw_data)
+    return result['encoding']
 
-# Read the CSV file and filter out empty rows
-with open(input_file, mode='r', newline='', encoding='utf-8') as infile, \
-     open(temp_file, mode='w', newline='', encoding='utf-8') as outfile:
-    reader = csv.reader(infile)
-    writer = csv.writer(outfile)
+def remove_empty_lines_from_csv(file_path):
+    # encoding = detect_file_encoding(file_path)
+    encoding = "utf-8"
+
+    print(f"Processing {file_path}")
     
-    for row in reader:
-        if any(field.strip() for field in row):  # Check if the row is not empty
-            writer.writerow(row)
+    with open(file_path, 'r', encoding=encoding) as file:
+        lines = file.readlines()
+    
+    non_empty_lines = [line for line in lines if line.strip() != '']
+    
+    with open(file_path, 'w', encoding=encoding) as file:
+        file.writelines(non_empty_lines)
 
-# Replace the original file with the cleaned file
-os.replace(temp_file, input_file)
+def process_all_csv_files():
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    for filename in os.listdir(current_directory):
+        if filename.endswith('.csv'):
+            file_path = os.path.join(current_directory, filename)
+            remove_empty_lines_from_csv(file_path)
 
-print("Empty rows removed and cleaned data saved to", input_file)
+# Process all CSV files in the current directory
+process_all_csv_files()
