@@ -1,4 +1,5 @@
 import csv
+import openpyxl
 import sys
 
 def clean_positive_employers_en():
@@ -187,8 +188,121 @@ def clean_2017(input_path, output_path):
             occupation = row[4].strip()
             positions = row[5].strip()
 
-            noc_2011 = occupation.split("-")[0]
-            noc_name = occupation.split("-")[1]
+            if(occupation.find("-") != -1):
+                noc_2011 = occupation.split("-")[0]
+                noc_name = occupation.split("-")[1]
+            writer.writerow([curr_province, employer, address, positions, stream, noc_2011, noc_name])
+
+def clean_2021(input_path, output_path):
+    input_file = sys.path[0] + input_path
+    output_file = sys.path[0] + output_path
+
+    # Clear the output file at the beginning
+    open(output_file, 'w').close()
+
+    # Load the workbook and select the active sheet
+    workbook = openpyxl.load_workbook(input_file)
+    sheet = workbook.active
+
+    with open(output_file, mode='w', newline='', encoding='utf-8') as outfile:
+        writer = csv.writer(outfile)
+
+        # Write the header for the cleansed CSV
+        writer.writerow(['Province', 'Employer', 'Address', 'Positions', 'Stream', 'NOC 2011', 'NOC Name',])
+
+        curr_province = ""
+        same_employer = ""
+
+        # Iterate over the rows in the sheet
+        for row in sheet.iter_rows(min_row=3, values_only=True):
+            # check if row has province
+            if(row[0] != None):
+                curr_province = row[0]
+            
+            # Province/Territory,Stream,Employer,Address,Occupations under NOC 2011,Positions Approved
+            if(row[2] != None):
+                same_employer = row[2]
+
+            if(row[1] is not None):
+                same_stream = row[1].strip()
+
+            if len(row) != 6 or row[3] is None:
+                continue
+
+
+            if(row[2] == ""):
+                employer = same_employer
+            else:
+                employer = row[2].strip()
+            
+            if(row[1] == ""):
+                stream = same_stream
+            else:
+                stream = row[2].strip()
+
+            address = row[3].strip()
+            occupation = row[4].strip()
+            positions = row[5]
+
+            if(occupation.find("-") != -1):
+                noc_2011 = occupation.split("-")[0]
+                noc_name = occupation.split("-")[1]
+            writer.writerow([curr_province, employer, address, positions, stream, noc_2011, noc_name])
+
+def clean_2022(input_path, output_path):
+    input_file = sys.path[0] + input_path
+    output_file = sys.path[0] + output_path
+
+    # Clear the output file at the beginning
+    open(output_file, 'w').close()
+
+    # Load the workbook and select the active sheet
+    workbook = openpyxl.load_workbook(input_file)
+    sheet = workbook.active
+
+    with open(output_file, mode='w', newline='', encoding='utf-8') as outfile:
+        writer = csv.writer(outfile)
+
+        # Write the header for the cleansed CSV
+        writer.writerow(['Province', 'Employer', 'Address', 'Positions', 'Stream', 'NOC 2011', 'NOC Name',])
+
+        curr_province = ""
+        same_employer = ""
+
+        # Iterate over the rows in the sheet
+        for row in sheet.iter_rows(min_row=3, values_only=True):
+            # check if row has province
+            if(row[0] != None):
+                curr_province = row[0]
+            
+            # Province/Territory	Program Stream	Employer 	Address 	Occupation 	Incorporate Status	Approved LMIAs	Approved Positions
+            if(row[2] != None):
+                same_employer = row[2]
+
+            if(row[1] is not None):
+                same_stream = row[1].strip()
+
+            if len(row) != 8 or row[3] is None:
+                continue
+
+
+            if(row[2] == ""):
+                employer = same_employer
+            else:
+                employer = row[2].strip()
+            
+            if(row[1] == ""):
+                stream = same_stream
+            else:
+                stream = row[2].strip()
+
+            address = row[3].strip()
+            occupation = row[4].strip()
+            positions = row[5]
+
+            if(occupation.find("-") != -1):
+                noc_2011 = occupation.split("-")[0]
+                noc_name = occupation.split("-")[1]
             writer.writerow([curr_province, employer, address, positions, stream, noc_2011, noc_name])
 
 # clean_positive_employers_en()
@@ -201,3 +315,24 @@ def clean_2017(input_path, output_path):
 # clean_2017('/2018q2_positive_employer_en.csv', '/../cleaned/2018_06_30.csv')
 # clean_2017('/2018q3_positive_en.csv', '/../cleaned/2018_09_30.csv')
 # clean_2017('/2018q4_positive_en.csv', '/../cleaned/2018_12_31.csv')
+
+# clean_2017('/tfwp_2019q1_employer_positive_en.csv', '/../cleaned/2019_03.csv')
+# clean_2017('/tfwp_2019q2_employer_positive_en.csv', '/../cleaned/2019_06.csv')
+# clean_2017('/tfwp_2019q3_positive_en.csv', '/../cleaned/2019_09.csv')
+# clean_2017('/tfwp_2019q4_positive_en.csv', '/../cleaned/2019_12.csv')
+
+# clean_2017('/tfwp_2020q1_positive_en.csv', '/../cleaned/2020_03.csv')
+# clean_2017('/tfwp_2020q3_positive_en.csv', '/../cleaned/2020_09.csv')
+
+# clean_2021('/TFWP_2021Q2_Positive_EN.xlsx', '/../cleaned/2021_06.csv')
+# clean_2021('/TFWP_2021Q3_Positive_EN.xlsx', '/../cleaned/2021_09.csv')
+
+clean_2021('/tfwp_2022q1_positive_en.xlsx', '/../cleaned/2022_03.csv')
+# clean_2021('/tfwp_2022q2_positive_en.xlsx', '/../cleaned/2022_06.csv')
+# clean_2021('/tfwp_2022q3_positive_en.xlsx', '/../cleaned/2022_09.csv')
+# clean_2021('/tfwp_2022q4_pos_en.xlsx', '/../cleaned/2022_12.csv')
+
+# clean_2021('/tfwp_2023q1_pos_en.xlsx', '/../cleaned/2023_03.csv')
+# clean_2021('/tfwp_2023q2_pos_en.xlsx', '/../cleaned/2023_06.csv')
+# clean_2021('/tfwp_2023q3_pos_en.xlsx', '/../cleaned/2023_09.csv')
+# clean_2021('/tfwp_2023q4_pos_en.xlsx', '/../cleaned/2023_12.csv')
