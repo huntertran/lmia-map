@@ -1,6 +1,7 @@
 import csv
 import openpyxl
 import sys
+from enum import Enum
 
 def clean_positive_employers_en():
     input_file = sys.path[0] + '/positive_employers_en.csv'
@@ -253,6 +254,16 @@ def clean_2022(input_path, output_path):
     input_file = sys.path[0] + input_path
     output_file = sys.path[0] + output_path
 
+    class Columns(Enum):
+        PROVINCE_TERRITORY = 0
+        PROGRAM_STREAM = 1
+        EMPLOYER = 2
+        ADDRESS = 3
+        OCCUPATION = 4
+        INCORPORATE_STATUS = 5
+        APPROVED_LMIAS = 6
+        APPROVED_POSITIONS = 7
+
     # Clear the output file at the beginning
     open(output_file, 'w').close()
 
@@ -264,46 +275,49 @@ def clean_2022(input_path, output_path):
         writer = csv.writer(outfile)
 
         # Write the header for the cleansed CSV
-        writer.writerow(['Province', 'Employer', 'Address', 'Positions', 'Stream', 'NOC 2011', 'NOC Name',])
+        writer.writerow(['Province', 'Employer', 'Address', 'Positions', 'Stream', 'NOC 2011', 'NOC Name', 'Incorporated Status', 'Approved LMIA'])
 
         curr_province = ""
         same_employer = ""
 
+        # Province/Territory	Program Stream	Employer 	Address 	Occupation 	Incorporate Status	Approved LMIAs	Approved Positions
+
         # Iterate over the rows in the sheet
         for row in sheet.iter_rows(min_row=3, values_only=True):
             # check if row has province
-            if(row[0] != None):
-                curr_province = row[0]
-            
-            # Province/Territory	Program Stream	Employer 	Address 	Occupation 	Incorporate Status	Approved LMIAs	Approved Positions
-            if(row[2] != None):
-                same_employer = row[2]
+            if(row[Columns.PROVINCE_TERRITORY.value] != None):
+                curr_province = row[Columns.PROVINCE_TERRITORY.value]
 
-            if(row[1] is not None):
-                same_stream = row[1].strip()
+            if(row[Columns.EMPLOYER.value] != None):
+                same_employer = row[Columns.EMPLOYER.value]
 
-            if len(row) != 8 or row[3] is None:
+            if(row[Columns.PROGRAM_STREAM.value] is not None):
+                same_stream = row[Columns.PROGRAM_STREAM.value].strip()
+
+            if len(row) != 8 or row[Columns.ADDRESS.value] is None:
                 continue
 
 
-            if(row[2] == ""):
+            if(row[Columns.EMPLOYER.value] == ""):
                 employer = same_employer
             else:
-                employer = row[2].strip()
+                employer = row[Columns.EMPLOYER.value].strip()
             
-            if(row[1] == ""):
+            if(row[Columns.PROGRAM_STREAM.value] == ""):
                 stream = same_stream
             else:
-                stream = row[2].strip()
+                stream = row[Columns.PROGRAM_STREAM.value].strip()
 
-            address = row[3].strip()
-            occupation = row[4].strip()
-            positions = row[5]
+            incorporated_status = row[Columns.INCORPORATE_STATUS.value]
+            address = row[Columns.ADDRESS.value].strip()
+            occupation = row[Columns.OCCUPATION.value].strip()
+            positions = row[Columns.APPROVED_POSITIONS.value]
+            approved_lmia = row[Columns.APPROVED_LMIAS.value]
 
             if(occupation.find("-") != -1):
                 noc_2011 = occupation.split("-")[0]
                 noc_name = occupation.split("-")[1]
-            writer.writerow([curr_province, employer, address, positions, stream, noc_2011, noc_name])
+            writer.writerow([curr_province, employer, address, positions, stream, noc_2011, noc_name, incorporated_status, approved_lmia])
 
 # clean_positive_employers_en()
 # clean_2015()
@@ -327,12 +341,12 @@ def clean_2022(input_path, output_path):
 # clean_2021('/TFWP_2021Q2_Positive_EN.xlsx', '/../cleaned/2021_06.csv')
 # clean_2021('/TFWP_2021Q3_Positive_EN.xlsx', '/../cleaned/2021_09.csv')
 
-clean_2021('/tfwp_2022q1_positive_en.xlsx', '/../cleaned/2022_03.csv')
-# clean_2021('/tfwp_2022q2_positive_en.xlsx', '/../cleaned/2022_06.csv')
-# clean_2021('/tfwp_2022q3_positive_en.xlsx', '/../cleaned/2022_09.csv')
-# clean_2021('/tfwp_2022q4_pos_en.xlsx', '/../cleaned/2022_12.csv')
+# clean_2022('/tfwp_2022q1_positive_en.xlsx', '/../cleaned/2022_03.csv')
+# clean_2022('/tfwp_2022q2_positive_en.xlsx', '/../cleaned/2022_06.csv')
+# clean_2022('/tfwp_2022q3_positive_en.xlsx', '/../cleaned/2022_09.csv')
+# clean_2022('/tfwp_2022q4_pos_en.xlsx', '/../cleaned/2022_12.csv')
 
-# clean_2021('/tfwp_2023q1_pos_en.xlsx', '/../cleaned/2023_03.csv')
-# clean_2021('/tfwp_2023q2_pos_en.xlsx', '/../cleaned/2023_06.csv')
-# clean_2021('/tfwp_2023q3_pos_en.xlsx', '/../cleaned/2023_09.csv')
-# clean_2021('/tfwp_2023q4_pos_en.xlsx', '/../cleaned/2023_12.csv')
+# clean_2022('/tfwp_2023q1_pos_en.xlsx', '/../cleaned/2023_03.csv')
+# clean_2022('/tfwp_2023q2_pos_en.xlsx', '/../cleaned/2023_06.csv')
+# clean_2022('/tfwp_2023q3_pos_en.xlsx', '/../cleaned/2023_09.csv')
+# clean_2022('/tfwp_2023q4_pos_en.xlsx', '/../cleaned/2023_12.csv')
