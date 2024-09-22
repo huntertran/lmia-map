@@ -75,11 +75,29 @@ def build_geo_database(file_names, employer_column_id, address_column_id, positi
         writer.writeheader()
         writer.writerows(modified_rows)
 
-build_geo_database(['2014.csv'], 0, 1, 2, 4, 5)
-build_geo_database(['2015.csv'], 0, 1, 2, 4, 5)
+# build_geo_database(['2014.csv'], 0, 1, 2, 4, 5)
+# build_geo_database(['2015.csv'], 0, 1, 2, 4, 5)
 
 # Province,Employer,Address,Positions,NOC 2011,NOC Name,Latitude,Longitude
-build_geo_database(['2016.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=6, longitude_column_id=7)
+# build_geo_database(['2016.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=6, longitude_column_id=7)
 
 # Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Latitude,Longitude
 build_geo_database(['2017_06.csv', '2017_09.csv', '2017_12.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=7, longitude_column_id=8)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Latitude,Longitude
+build_geo_database(['2018_03.csv', '2018_06.csv', '2018_09.csv', '2018_12.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=7, longitude_column_id=8)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Latitude,Longitude
+build_geo_database(['2019_03.csv', '2019_06.csv', '2019_09.csv', '2019_12.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=7, longitude_column_id=8)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Latitude,Longitude
+build_geo_database(['2020_03.csv', '2020_09.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=7, longitude_column_id=8)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Latitude,Longitude
+build_geo_database(['2021_06.csv', '2021_09.csv'], employer_column_id=1, address_column_id=2, position_column_id=3, latitude_column_id=7, longitude_column_id=8)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Incorporated Status,Approved LMIA,Latitude,Longitude
+build_geo_database(['2022_03.csv', '2022_06.csv', '2022_09.csv', '2022_12.csv'], employer_column_id=1, address_column_id=2, position_column_id=8, latitude_column_id=9, longitude_column_id=10)
+
+# Province,Employer,Address,Positions,Stream,NOC 2011,NOC Name,Incorporated Status,Approved LMIA,Latitude,Longitude
+build_geo_database(['2023_03.csv', '2023_06.csv', '2023_09.csv', '2023_12.csv'], employer_column_id=1, address_column_id=2, position_column_id=8, latitude_column_id=9, longitude_column_id=10)
