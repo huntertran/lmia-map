@@ -13,6 +13,7 @@
   "dependencies": {
     "lmia-map": "file:",
     "monotone-chain-convex-hull": "^1.1.0",
-    "ol": "latest"
+    "ol": "latest",
+    "papaparse": "^5.4.1"
   }
 }
