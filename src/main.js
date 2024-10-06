@@ -23,9 +23,15 @@ useGeographic();
 const DEFAULT_STROKE_COLOR = '#fff';
 const DEFAULT_FILL_COLOR = '#FF0000';
 const TEXT_FILL_COLOR = '#fff';
-const MAP_CENTER = [-79.3832, 43.6532];
+const MAP_CENTER = [-79.3832, 43.6532]; // Toronto
 const INITIAL_ZOOM = 7;
 const styleCache = {};
+
+let vectorSource = new VectorSource();
+let clusterSource = new Cluster({
+  distance: 40,
+  source: vectorSource
+});
 
 // Helper Functions
 function createStroke(color = DEFAULT_STROKE_COLOR) {
@@ -61,65 +67,72 @@ function getStyle(size) {
   return styleCache[size];
 }
 
-function updateYearLabel(value) {
-  document.getElementById('yearLabel').innerText = value;
-}
-
 function buyCoffee() {
-  // go to https://buymeacoffee.com/huntertran
   window.open('https://buymeacoffee.com/huntertran', '_blank');
 }
 
-// Main Code
-var features = [];
+function showInfo() {
+  window.open('https://open.canada.ca/data/en/dataset/90fed587-1364-4f33-a9ee-208181dc0b97', '_blank');
+}
 
-fetch('data/2014.csv')
-  .then(response => response.text())
-  .then(csvText => {
-    Papa.parse(csvText, {
-      header: true,
-      dynamicTyping: true,
-      complete: function (results) {
-        results.data.forEach(row => {
-          var coordinates = [row.Longitude, row.Latitude];
-          features.push(new Feature(new Point(coordinates)));
-        });
+function initMap() {
+  var clusters = new VectorLayer({
+    source: clusterSource,
+    style: function (feature, resolution) {
+      var size = feature.get('features').length;
+      return getStyle(size);
+    }
+  });
 
-        var source = new VectorSource({
-          features: features
-        });
+  var map = new Map({
+    target: 'map',
+    layers: [
+      new TileLayer({
+        source: new OSM(),
+      }),
+      clusters
+    ],
+    view: new View({
+      center: MAP_CENTER,
+      zoom: INITIAL_ZOOM,
+    }),
+  });
+}
 
-        var clusterSource = new Cluster({
-          distance: 40,
-          source: source
-        });
+function loadData(file) {
+  var features = [];
 
-        var clusters = new VectorLayer({
-          source: clusterSource,
-          style: function (feature, resolution) {
-            var size = feature.get('features').length;
-            return getStyle(size);
-          }
-        });
+  fetch(file)
+    .then(response => response.text())
+    .then(csvText => {
+      Papa.parse(csvText, {
+        header: true,
+        dynamicTyping: true,
+        complete: function (results) {
+          results.data.forEach(row => {
+            var coordinates = [row.Longitude, row.Latitude];
+            features.push(new Feature(new Point(coordinates)));
+          });
 
-        var map = new Map({
-          target: 'map',
-          layers: [
-            new TileLayer({
-              source: new OSM(),
-            }),
-            clusters
-          ],
-          view: new View({
-            center: MAP_CENTER,
-            zoom: INITIAL_ZOOM,
-          }),
-        });
-      }
-    });
-  })
-  .catch(error => console.error('Error fetching the CSV file:', error));
+          vectorSource.clear();
+          vectorSource.addFeatures(features);
+          clusterSource.setSource(vectorSource);
+        }
+      });
+    })
+    .catch(error => console.error('Error fetching the CSV file:', error));
+}
+
+function onSliderInput(year) {
+  document.getElementById('yearLabel').innerText = year;
+  loadData('data/' + year + '.csv');
+}
 
 // Ensure the function is available globally
-window.updateYearLabel = updateYearLabel;
+window.onSliderInput = onSliderInput;
 window.buyCoffee = buyCoffee;
+window.showInfo = showInfo;
+
+initMap();
+// Fetch the CSV file
+loadData('data/2014.csv');

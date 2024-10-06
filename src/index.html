@@ -19,7 +19,7 @@
       <div class="buttons">
             <button class="coffee-button"
                     onclick="buyCoffee()"
-                    title="Buy Coffee">
+                    title="Buy me a coffee">
                   <svg xmlns="http://www.w3.org/2000/svg"
                        xmlns:xlink="http://www.w3.org/1999/xlink"
                        fill="#000000"
@@ -62,14 +62,14 @@
       </div>
       <div class="slider-background">
             <div class="slider-container">
-                  <div id="yearLabel">2023</div>
+                  <div id="yearLabel">2024</div>
                   <input type="range"
                          id="yearSlider"
                          min="2014"
                          max="2023"
                          step="1"
                          value="2023"
-                         oninput="updateYearLabel(this.value)"
+                         oninput="onSliderInput(this.value)"
                          title="Select year">
                   <div class="slider-labels">
                         <span>2014</span>
@@ -82,6 +82,7 @@
                         <span>2021</span>
                         <span>2022</span>
                         <span>2023</span>
+                        <span>2024</span>
                   </div>
             </div>
       </div>
