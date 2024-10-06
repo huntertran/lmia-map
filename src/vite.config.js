@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
 export default {
   build: {
+    base: '/lmia-map/',
     sourcemap: true,
     outDir: '../docs'
   },
