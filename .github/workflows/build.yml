@@ -24,6 +24,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+      - name: Navigate to src folder
+        run: cd ./src/
 
       - name: Install Dependencies
         run: npm ci
