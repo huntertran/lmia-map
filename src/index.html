@@ -2,22 +2,52 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon"
-        type="image/x-icon"
-        href="https://openlayers.org/favicon.ico" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0" />
-  <title>Using OpenLayers with Vite</title>
-  <link rel="stylesheet"
-        href="style.css">
+      <meta charset="UTF-8" />
+      <link rel="icon"
+            type="image/x-icon"
+            href="https://openlayers.org/favicon.ico" />
+      <meta name="viewport"
+            content="width=device-width, initial-scale=1.0" />
+      <title>Using OpenLayers with Vite</title>
+      <link rel="stylesheet"
+            href="style.css">
 </head>
 
 <body>
-  <div id="map"
-       class="map"></div>
-  <script type="module"
-          src="./main.js"></script>
+      <div id="map"
+           class="map"></div>
+      <div class="controls">
+            <div class="slider-background">
+                  <div class="slider-container">
+                        <div id="yearLabel">2023</div>
+                        <input type="range"
+                               id="yearSlider"
+                               min="2014"
+                               max="2023"
+                               step="1"
+                               value="2023"
+                               oninput="updateYearLabel(this.value)"
+                               title="Select year">
+                        <div class="slider-labels">
+                              <span>2014</span>
+                              <span>2015</span>
+                              <span>2016</span>
+                              <span>2017</span>
+                              <span>2018</span>
+                              <span>2019</span>
+                              <span>2020</span>
+                              <span>2021</span>
+                              <span>2022</span>
+                              <span>2023</span>
+                        </div>
+                  </div>
+            </div>
+            <div class="info">
+
+            </div>
+      </div>
+      <script type="module"
+              src="./main.js"></script>
 </body>
 
 </html>

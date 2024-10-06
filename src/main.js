@@ -61,6 +61,10 @@ function getStyle(size) {
   return styleCache[size];
 }
 
+function updateYearLabel(value) {
+  document.getElementById('yearLabel').innerText = value;
+}
+
 // Main Code
 var features = [];
 
@@ -110,3 +114,6 @@ fetch('data/2014.csv')
     });
   })
   .catch(error => console.error('Error fetching the CSV file:', error));
+
+// Ensure the function is available globally
+window.updateYearLabel = updateYearLabel;
