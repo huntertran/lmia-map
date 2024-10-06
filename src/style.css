@@ -15,16 +15,17 @@ body {
 }
 
 .slider-background {
+  flex: 0 0 90%;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
-  bottom: 0;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
-  left: 50%;
-  margin: 20px auto;
-  position: fixed;
+  margin: 8px auto;
   text-align: center;
+  bottom: 0;
+  position: fixed;
+  left: 50%;
   transform: translateX(-50%);
   width: 90%;
   z-index: 1000;
@@ -32,22 +33,20 @@ body {
 
 .slider-container {
   bottom: 0;
-  margin: 20px auto;
-  margin: 20px auto;
+  margin: 8px;
   text-align: center;
-  width: 90%;
   z-index: 1000;
 }
 
 #yearSlider {
-  margin: 10px 0;
+  margin: 4px 0;
   width: 100%;
 }
 
 .slider-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .slider-labels span {
@@ -59,4 +58,35 @@ body {
   font-size: 1.2em;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.buttons {
+  position: fixed;
+  right: 0;
+}
+
+.coffee-button,
+.info-button {
+  margin-top: 4px;
+  margin-right: 4px;
+  background-color: #ffdd5783;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: #333;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.coffee-button svg {
+  fill: #333;
+}
+
+.coffee-button:hover {
+  background-color: #00704A;
+}
+
+.coffee-button:hover svg {
+  fill: #fff;
 }

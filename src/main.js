@@ -65,6 +65,11 @@ function updateYearLabel(value) {
   document.getElementById('yearLabel').innerText = value;
 }
 
+function buyCoffee() {
+  // go to https://buymeacoffee.com/huntertran
+  window.open('https://buymeacoffee.com/huntertran', '_blank');
+}
+
 // Main Code
 var features = [];
 
@@ -117,3 +122,4 @@ fetch('data/2014.csv')
 
 // Ensure the function is available globally
 window.updateYearLabel = updateYearLabel;
+window.buyCoffee = buyCoffee;
