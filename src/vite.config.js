@@ -1,6 +1,6 @@
 export default {
   build: {
-    base: '/lmia-map/',
+    base: 'https://huntertran.github.io/lmia-map/',
     sourcemap: true,
     outDir: '../docs'
   },
