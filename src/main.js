@@ -10,7 +10,7 @@ import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import Text from 'ol/style/Text';
 import Overlay from 'ol/Overlay';
-import Map from 'ol/Map';
+import OLMap from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
@@ -27,6 +27,7 @@ const TEXT_FILL_COLOR = '#fff';
 const MAP_CENTER = [-79.3832, 43.6532]; // Toronto
 const INITIAL_ZOOM = 7;
 const styleCache = {};
+const allEmployers = new Map();
 
 const element = document.getElementById('popup');
 const popup = new Overlay({
@@ -93,7 +94,7 @@ function initMap() {
     }
   });
 
-  var map = new Map({
+  var map = new OLMap({
     target: document.getElementById('map'),
     layers: [
       new TileLayer({
@@ -118,6 +119,32 @@ function disposePopover() {
   }
 }
 
+function getClusterContent(features) {
+  let content = '';
+  if (features.length <= 10) {
+    content = '<div class="popover-content"><ul>';
+    features.forEach(feature => {
+      const employerId = feature.get('emId');
+      const employer = allEmployers.get(employerId);
+      if (employer) {
+        content += `<li><strong>${employer.Employer}</strong><br>${employer.Address}</li>`;
+      }
+    });
+    content += '</ul></div>';
+  }
+  else {
+    let sumPos = 0;
+    features.forEach(feature => {
+      const pos = feature.get('pos');
+      sumPos += pos;
+    });
+    content = `Total <strong>${features.length}</strong> employers`;
+    content += "<br>";
+    content += `Number of LMIA positions: <strong>${sumPos}</strong>`;
+  }
+  return content;
+}
+
 function onClusterClicked(map, evt) {
   const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
     return feature;
@@ -132,9 +159,10 @@ function onClusterClicked(map, evt) {
   popup.setPosition(evt.coordinate);
 
   popover = new bootstrap.Popover(element, {
-    placement: 'top',
+    placement: 'auto',
     html: true,
-    content: feature.get('features').length,
+    content: getClusterContent(feature.get('features')),
+    boundary: 'window'
   });
 
   popover.show();
@@ -172,7 +200,12 @@ function loadData(file) {
         complete: function (results) {
           results.data.forEach(row => {
             var coordinates = [row.Longitude, row.Latitude];
-            features.push(new Feature(new Point(coordinates)));
+            var feature = new Feature(new Point(coordinates));
+            feature.setProperties({
+              'emId': row.EmployerID,
+              'pos': row.Position
+            });
+            features.push(feature);
           });
 
           vectorSource.clear();
@@ -182,6 +215,22 @@ function loadData(file) {
       });
     })
     .catch(error => console.error('Error fetching the CSV file:', error));
+}
+
+function loadEmployers() {
+  Papa.parse('data/all_employers.csv', {
+    header: true,
+    dynamicTyping: true,
+    download: true,
+    complete: function (results) {
+      results.data.forEach(row => {
+        allEmployers.set(row.ID, row);
+      });
+    },
+    error: function (error) {
+      console.error('Error fetching all_employers.csv: ', error);
+    }
+  });
 }
 
 function onSliderInput(year) {
@@ -197,3 +246,4 @@ window.showInfo = showInfo;
 initMap();
 // Fetch the CSV file
 loadData('data/2023.csv');
+loadEmployers();
