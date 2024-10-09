@@ -9,6 +9,7 @@ import CircleStyle from 'ol/style/Circle';
 import Stroke from 'ol/style/Stroke';
 import Fill from 'ol/style/Fill';
 import Text from 'ol/style/Text';
+import Overlay from 'ol/Overlay';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -27,11 +28,19 @@ const MAP_CENTER = [-79.3832, 43.6532]; // Toronto
 const INITIAL_ZOOM = 7;
 const styleCache = {};
 
+const element = document.getElementById('popup');
+const popup = new Overlay({
+  element: element,
+  positioning: 'bottom-center',
+  stopEvent: false,
+});
+
 let vectorSource = new VectorSource();
 let clusterSource = new Cluster({
   distance: 40,
   source: vectorSource
 });
+let popover;
 
 // Helper Functions
 function createStroke(color = DEFAULT_STROKE_COLOR) {
@@ -85,7 +94,7 @@ function initMap() {
   });
 
   var map = new Map({
-    target: 'map',
+    target: document.getElementById('map'),
     layers: [
       new TileLayer({
         source: new OSM(),
@@ -97,6 +106,58 @@ function initMap() {
       zoom: INITIAL_ZOOM,
     }),
   });
+
+  registerPopup(map);
+  registerPointer(map);
+}
+
+function disposePopover() {
+  if (popover) {
+    popover.dispose();
+    popover = undefined;
+  }
+}
+
+function onClusterClicked(map, evt) {
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    return feature;
+  });
+
+  disposePopover(popover);
+
+  if (!feature) {
+    return;
+  }
+
+  popup.setPosition(evt.coordinate);
+
+  popover = new bootstrap.Popover(element, {
+    placement: 'top',
+    html: true,
+    content: feature.get('features').length,
+  });
+
+  popover.show();
+}
+
+function registerPopup(map) {
+  map.addOverlay(popup);
+
+  // display popup on click
+  map.on('click', function (evt) {
+    return onClusterClicked(map, evt);
+  });
+}
+
+function registerPointer(map) {
+  // change mouse cursor when over marker
+  map.on('pointermove', function (e) {
+    const pixel = map.getEventPixel(e.originalEvent);
+    const hit = map.hasFeatureAtPixel(pixel);
+    map.getTarget().style.cursor = hit ? 'pointer' : '';
+  });
+  // Close the popup when the map is moved
+  map.on('movestart', disposePopover);
 }
 
 function loadData(file) {
@@ -135,4 +196,4 @@ window.showInfo = showInfo;
 
 initMap();
 // Fetch the CSV file
-loadData('data/2014.csv');
+loadData('data/2023.csv');

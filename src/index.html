@@ -12,12 +12,16 @@
       <meta name="description"
             content="An interactive web that visualizes Labour Market Impact Assessment (LMIA) data over time." />
       <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+      <link rel="stylesheet"
             href="style.css">
 </head>
 
 <body>
       <div id="map"
-           class="map"></div>
+           class="map">
+            <div id="popup"> </div>
+      </div>
       <div class="buttons">
             <button class="coffee-button"
                     onclick="buyCoffee()"
@@ -88,6 +92,7 @@
                   </div>
             </div>
       </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
       <script type="module"
               src="./main.js"></script>
 </body>
