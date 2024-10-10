@@ -21,6 +21,7 @@ import Papa from 'papaparse';
 useGeographic();
 
 // Constants
+const UPDATED_DATE = '20241009';
 const DEFAULT_STROKE_COLOR = '#fff';
 const DEFAULT_FILL_COLOR = '#FF0000';
 const TEXT_FILL_COLOR = '#fff';
@@ -218,7 +219,7 @@ function loadData(file) {
 }
 
 function loadEmployers() {
-  Papa.parse('data/all_employers.csv', {
+  Papa.parse('data/all_employers.csv?updated=' + UPDATED_DATE, {
     header: true,
     dynamicTyping: true,
     download: true,
@@ -245,5 +246,5 @@ window.showInfo = showInfo;
 
 initMap();
 // Fetch the CSV file
-loadData('data/2023.csv');
+loadData('data/2024.csv');
 loadEmployers();

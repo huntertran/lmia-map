@@ -1,3 +1,5 @@
+# change encoding format of all csv
+
 # import os
 
 # # Define the directory to search

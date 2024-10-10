@@ -310,7 +310,7 @@ def clean_2022(input_path, output_path):
 
             incorporated_status = row[Columns.INCORPORATE_STATUS.value]
             address = row[Columns.ADDRESS.value].strip()
-            occupation = row[Columns.OCCUPATION.value].strip()
+            occupation = row[Columns.OCCUPATION.value].strip() if row[Columns.OCCUPATION.value] else ""
             positions = row[Columns.APPROVED_POSITIONS.value]
             approved_lmia = row[Columns.APPROVED_LMIAS.value]
 
@@ -350,3 +350,4 @@ def clean_2022(input_path, output_path):
 # clean_2022('/tfwp_2023q2_pos_en.xlsx', '/../cleaned/2023_06.csv')
 # clean_2022('/tfwp_2023q3_pos_en.xlsx', '/../cleaned/2023_09.csv')
 # clean_2022('/tfwp_2023q4_pos_en.xlsx', '/../cleaned/2023_12.csv')
+clean_2022('/tfwp_2024q1_pos_en.xlsx', '/../cleaned/2024_03.csv')
