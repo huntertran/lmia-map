@@ -123,15 +123,17 @@ function disposePopover() {
 function getClusterContent(features) {
   let content = '';
   if (features.length <= 10) {
-    content = '<div class="popover-content"><ul>';
+    content = '<div class="popover-content"><table class="table table-striped">';
+    content += '<thead><tr><th>Employer</th><th>Address</th><th>Positions</th></tr></thead><tbody>';
     features.forEach(feature => {
       const employerId = feature.get('emId');
+      const pos = feature.get('pos');
       const employer = allEmployers.get(employerId);
       if (employer) {
-        content += `<li><strong>${employer.Employer}</strong><br>${employer.Address}</li>`;
+        content += `<tr><td><strong>${employer.Employer}</strong></td><td>${employer.Address}</td><td>${pos}</td></tr>`;
       }
     });
-    content += '</ul></div>';
+    content += '</tbody></table></div>';
   }
   else {
     let sumPos = 0;
@@ -171,6 +173,14 @@ function onClusterClicked(map, evt) {
 
 function registerPopup(map) {
   map.addOverlay(popup);
+
+  bootstrap.Tooltip.Default.allowList.table = [];
+  bootstrap.Tooltip.Default.allowList.tr = [];
+  bootstrap.Tooltip.Default.allowList.th = [];
+  bootstrap.Tooltip.Default.allowList.td = [];
+  bootstrap.Tooltip.Default.allowList.div = [];
+  bootstrap.Tooltip.Default.allowList.tbody = [];
+  bootstrap.Tooltip.Default.allowList.thead = [];
 
   // display popup on click
   map.on('click', function (evt) {
