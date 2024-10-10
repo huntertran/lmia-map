@@ -11,13 +11,17 @@
       <title>LMIA Map</title>
       <meta name="description"
             content="An interactive web that visualizes Labour Market Impact Assessment (LMIA) data over time." />
-  <script type="module" crossorigin src="/lmia-map/assets/index-CqYAfAb4.js"></script>
-  <link rel="stylesheet" crossorigin href="/lmia-map/assets/index-Dj0hPMEM.css">
+      <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+  <script type="module" crossorigin src="/lmia-map/assets/index-DnI0uYhx.js"></script>
+  <link rel="stylesheet" crossorigin href="/lmia-map/assets/index-Dtnn372i.css">
 </head>
 
 <body>
       <div id="map"
-           class="map"></div>
+           class="map">
+            <div id="popup"> </div>
+      </div>
       <div class="buttons">
             <button class="coffee-button"
                     onclick="buyCoffee()"
@@ -68,9 +72,9 @@
                   <input type="range"
                          id="yearSlider"
                          min="2014"
-                         max="2023"
+                         max="2024"
                          step="1"
-                         value="2023"
+                         value="2024"
                          oninput="onSliderInput(this.value)"
                          title="Select year">
                   <div class="slider-labels">
@@ -88,6 +92,17 @@
                   </div>
             </div>
       </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Google tag (gtag.js) -->
+      <script async
+              src="https://www.googletagmanager.com/gtag/js?id=G-ZBP61R1C43"></script>
+      <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'G-ZBP61R1C43');
+      </script>
 </body>
 
 </html>
