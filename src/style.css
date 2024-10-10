@@ -99,9 +99,13 @@ body {
 }
 
 .popover-body {
-  /* padding: 8px; */
+  padding: 8px;
 
   ul {
+    margin: 0;
+  }
+
+  .table {
     margin: 0;
   }
 }

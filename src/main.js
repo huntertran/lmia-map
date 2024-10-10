@@ -123,17 +123,21 @@ function disposePopover() {
 function getClusterContent(features) {
   let content = '';
   if (features.length <= 10) {
-    content = '<div class="popover-content"><table class="table table-striped">';
-    content += '<thead><tr><th>Employer</th><th>Address</th><th>Positions</th></tr></thead><tbody>';
+    let sumPos = 0;
+    let container = '<div class="popover-content"><table class="table table-striped">';
+    let table = '';
     features.forEach(feature => {
       const employerId = feature.get('emId');
       const pos = feature.get('pos');
+      sumPos += pos;
       const employer = allEmployers.get(employerId);
       if (employer) {
-        content += `<tr><td><strong>${employer.Employer}</strong></td><td>${employer.Address}</td><td>${pos}</td></tr>`;
+        table += `<tr><td><strong>${employer.Employer}</strong></td><td>${employer.Address}</td><td>${pos}</td></tr>`;
       }
     });
-    content += '</tbody></table></div>';
+    table += '</tbody></table></div>';
+    let header = `<thead><tr><th>Employer (${features.length})</th><th>Address</th><th>Positions (${sumPos})</th></tr></thead><tbody>`;
+    content = container + header + table;
   }
   else {
     let sumPos = 0;
