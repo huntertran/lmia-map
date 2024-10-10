@@ -236,7 +236,12 @@ function loadEmployers() {
 
 function onSliderInput(year) {
   document.getElementById('yearLabel').innerText = year;
-  loadData('data/' + year + '.csv');
+  if (year == 2024) {
+    loadData('data/' + year + '.csv?updated=' + UPDATED_DATE);
+  }
+  else {
+    loadData('data/' + year + '.csv');
+  }
 }
 
 // Ensure the function is available globally
@@ -246,5 +251,5 @@ window.showInfo = showInfo;
 
 initMap();
 // Fetch the CSV file
-loadData('data/2024.csv');
+loadData('data/2024.csv?updated=' + UPDATED_DATE);
 loadEmployers();
